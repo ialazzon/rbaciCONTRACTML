@@ -1,0 +1,525 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.example.org/sclang')]
+
+[template public sclang(aContractLanguage : ContractLanguage)]
+[comment @main/]
+[for (con : SContract| aContractLanguage.eAllContents("SContract")->asOrderedSet())]
+[if (con.targetPlatform.toString()='Ethereum')]
+    [file (con.scName.replaceAll(' ', '_')+'E.txt', false, 'UTF-8')]
+	  // SPDX-License-Identifier: MIT
+	  pragma solidity ^0.8.0;
+	
+	  import "@openzeppelin/contracts/access/AccessControl.sol";
+
+      contract [con.scName.replaceAll(' ', '_')/] is AccessControl {
+		address public owner;
+
+        [for (as : Asset | con.eAllContents("Asset")->asOrderedSet())]
+			
+		  [for (par : Parameter | as.eAllContents("Parameter")->asOrderedSet())]
+		  [if(par.type='integer')]
+	    ['uint32' +' public '+ par.name.replaceAll(' ', '_')/];
+		  [elseif (par.type='string')]
+		['string' +' public '+ par.name.replaceAll(' ', '_')/];
+		  [/if]
+          [/for]
+        [/for]
+		
+		[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+        bytes32 public constant [role.name.replaceAll(' ', '').toLowerFirst()/]_ROLE = keccak256("[role.name.replaceAll(' ', '').toLowerFirst()/]_ROLE");
+        [/for]
+
+        [for (par : Participant | con.eAllContents("Participant")->asOrderedSet())]
+        address public [par.name.replaceAll(' ', '').toLowerFirst()/]Address;
+        [/for]
+
+        [for (tranrel : TranRel | con.eAllContents("TranRel"))]
+        modifier only[tranrel.from.name.replaceAll(' ', '')/]{
+          require(msg.sender == [tranrel.from.name.replaceAll(' ', '').toLowerFirst()/]Address);
+          _;
+        }
+
+        [/for] 
+        constructor([let s:Integer = self.eAllContents("Participant")->asOrderedSet()->size()][for (par : Participant | con.eAllContents("Participant"))]address [par.name.replaceAll(' ', '').toLowerFirst()/][if i <s],[/if][/for][/let]){
+			// Grant the contract deployer the default admin role: it will be able
+        	// to grant and revoke any roles
+			owner = msg.sender;
+        	_setupRole(DEFAULT_ADMIN_ROLE, owner);
+			[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+			[if(role.owner->notEmpty())]
+			_setupRole(DEFAULT_ADMIN_ROLE, [role.owner.name.replaceAll(' ', '').toLowerFirst()/]);
+			[/if]
+			[/for]
+			[for (par : Participant | con.eAllContents("Participant")->asOrderedSet())]
+
+			[par.name.replaceAll(' ', '').toLowerFirst()/]Address = [par.name.replaceAll(' ', '').toLowerFirst()/];
+			[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+			[if(role.participant->includes(par))]			_setupRole([role.name.replaceAll(' ', '').toLowerFirst()/]_ROLE, [par.name.replaceAll(' ', '').toLowerFirst()/]Address);
+[/if][/for]	
+			[/for]
+		}
+
+        [for (assetrel : AssetRel | con.eAllContents("AssetRel"))]
+          [for (even : Events | assetrel.eAllContents("Events"))]
+        event  //  [even.name/]  --- [even.description/]
+          [/for]
+        [/for]
+
+[for (func : Transaction | con.eAllContents("Transaction"))]
+[let t:Integer =con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func))->size()]
+[let s:Integer = con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name)->size()]
+[let o:Integer = con.eAllContents("OR")->asOrderedSet()->select(o | o.transaction=func)->size()]
+[if(t+s+o<=1)]   
+        function [func.name/] () public [for (tranrel : TranRel | con.eAllContents("TranRel")->select(trre | trre.to.name=func.name))]only[tranrel.from.name.replaceAll(' ', '')/] [/for] {
+	        // Check that the calling account has the right role
+	        [for (rr: RoleRel | con.eAllContents("RoleRel")->asOrderedSet())][if(rr.to->includes(func))]require(hasRole([rr.from.name.replaceAll(' ', '').toLowerFirst()/]_ROLE, msg.sender), "Caller does not have the right role to call this function");[/if][/for]
+			[for (precond : Pre | func.eAllContents("Pre"))]
+	          require //  [precond.name/]  ---  [precond.condition/]
+	        [/for]
+			[for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]
+			  require ([let or_dis:Integer =orr.dis_element->size()][for(dis:Participant| orr.dis_element->select(par | par.oclIsKindOf(Participant))->asOrderedSet())]msg.sender == [dis.name.replaceAll(' ', '').toLowerFirst()/]Address[if i <or_dis] || [/if][/for][/let][for(rr:RoleRel| con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to=orr))] || hasRole([rr.from.name.replaceAll(' ', '').toLowerFirst()/]_ROLE, msg.sender)[/for]);
+			[/for]
+        }
+
+      
+[/if]
+[if(t+s+o>1)]
+        address['['/][']'/] alreadySigned_[func.name/];
+        address['['/][']'/] toSign_[func.name/];
+
+		function [func.name/] () private {
+			// Fill with function body
+		}
+
+		function [func.name/]_Pending([for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func)))][let role:Role = roleRel.from.oclAsType(Role)]address [role.name.replaceAll(' ', '').toLowerFirst()/] [if i <t],[/if][/let][/for][if t>0],[/if][for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]address o[i/][if i <o],[/if][/for]) public{
+			[for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func)))][let role:Role = roleRel.from.oclAsType(Role)]
+			require(hasRole([role.name.replaceAll(' ', '').toLowerFirst()/]_ROLE, [role.name.replaceAll(' ', '').toLowerFirst()/]), "Address [role.name.replaceAll(' ', '').toLowerFirst()/] does not belong to the required role");
+			[/let][/for]
+			[for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]require([let j:Integer = i][let or_dis:Integer =orr.dis_element->size()][for(dis:Participant| orr.dis_element->select(par | par.oclIsKindOf(Participant))->asOrderedSet())]o[j/] == [dis.name.replaceAll(' ', '').toLowerFirst()/]Address[if i <or_dis] || [/if][/for][/let][/let][for(rr:RoleRel| con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to=orr))] || hasRole([rr.from.name.replaceAll(' ', '').toLowerFirst()/]_ROLE, o[i/])[/for]);[/for]
+            toSign_GradeHW =['['/][for (tranrel : TranRel | con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name))][tranrel.from.name.replaceAll(' ', '').toLowerFirst()/]Address[if i <s],[/if][/for][if t>0 and s>0],[/if][for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func)))][let role:Role = roleRel.from.oclAsType(Role)] [role.name.replaceAll(' ', '').toLowerFirst()/] [if i <t],[/if][/let][/for][if s+t>0 and o>0],[/if][for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))] o[i/][if i <o],[/if][/for][']'/];
+        }
+
+		function Sign_[func.name/] (address signer) public{
+            require(msg.sender==signer);
+            require(search_toSign_[func.name/](signer) );
+            if(!search_alreadySigned_[func.name/](signer))
+                alreadySigned_[func.name/].push(signer);
+        }
+
+		function Finalize_[func.name/] (address signer) public {
+            require(msg.sender==signer);
+            require(search_toSign_[func.name/](signer) );
+            require(are_Equal_[func.name/]());
+            [func.name/]();
+        }
+
+        function search_toSign_[func.name/](address signer) private view returns (bool found){
+            for (uint i = 0; i < toSign_[func.name/].length; i++) {
+                if (toSign_[func.name/]['['/]i[']'/] == signer) {
+                    return true;
+                } 
+            }   
+            return false;
+        }
+
+        function search_alreadySigned_[func.name/](address signer) private view returns (bool found){
+            for (uint i = 0; i < alreadySigned_[func.name/].length; i++) {
+                if (alreadySigned_[func.name/]['['/]i[']'/] == signer) {
+                    return true;
+                } 
+            }   
+            return false;
+        }
+
+        function are_Equal_[func.name/]() private view returns (bool equal){
+            if (alreadySigned_[func.name/].length != toSign_[func.name/].length) {
+                return false;
+            }
+            for (uint i = 0; i < toSign_[func.name/].length; i++) {
+                if (!search_alreadySigned_[func.name/](toSign_[func.name/]['['/]i[']'/])) {
+                    return false;
+                } 
+            } 
+            return true;
+        }		
+[/if]  
+[/let]
+[/let]
+[/let]
+[/for]
+      }
+	[/file]
+	[file ('Testing_'+con.scName.replaceAll(' ', '_')+'E.txt', false, 'UTF-8')]
+const [con.scName.replaceAll(' ', '_')/] = artifacts.require('./[con.scName.replaceAll(' ', '_')/].sol');
+contract("[con.scName.replaceAll(' ', '_')/]", (accounts) => {
+    let [con.scName.replaceAll(' ', '_').toLowerFirst()/];
+
+[for (par : Participant | con.eAllContents("Participant")->asOrderedSet())]
+    let [par.name.replaceAll(' ', '').toLowerFirst()/] = accounts['['+i+']'/];
+[/for]
+
+
+    before("Set up contract", async () =>{
+        [con.scName.replaceAll(' ', '_').toLowerFirst()/] = await [con.scName.replaceAll(' ', '_')/].new([for (par : Participant | con.eAllContents("Participant")->asOrderedSet())][par.name.replaceAll(' ', '').toLowerFirst()/][if (par.followingSiblings()->size()>0)],[/if][/for]);
+    });
+
+    it('ensure that owner is the first address', async  () => {
+        const owner = await [con.scName.replaceAll(' ', '_').toLowerFirst()/].owner();
+        assert.equal(owner, accounts['['+0+']'/]);
+
+    });
+}
+
+[for (par : Participant | con.eAllContents("Participant")->asOrderedSet())]
+[for (func : Transaction | con.eAllContents("Transaction"))]
+[if (con.eAllContents("TranRel")->exists(tr|tr.from = par and tr.to=func) or con.eAllContents("RoleRel")->exists(rr|rr.to->includes(func) and rr.from.oclAsType(Role).participant->includes(par)))]
+    it('[par.name.toLowerFirst()/] should be able to execute transaction [func.name/]]', async () => {
+[else]
+    it('[par.name.toLowerFirst()/] should not be able to execute transaction [func.name/]]', async () => {
+[/if]
+        let ableToAccess;
+        try {
+            await [con.scName.replaceAll(' ', '_').toLowerFirst()/].[func.name/]({from:[par.name.toLowerFirst()/]});
+			ableToAccess = true;
+        } catch (e) {
+			ableToAccess = false;
+        }
+[if (con.eAllContents("TranRel")->exists(tr|tr.from = par and tr.to=func) or con.eAllContents("RoleRel")->exists(rr|rr.to->includes(func) and rr.from.oclAsType(Role).participant->includes(par)))]
+        assert.equal(ableToAccess, true,'[par.name.toLowerFirst()/] not able to execuate transaction [func.name/]');
+[else]
+        assert.equal(ableToAccess, false,'[par.name.toLowerFirst()/] able to execuate transaction [func.name/]');
+[/if]
+    });
+
+[/for]    
+[/for]
+	[/file]
+[/if]
+  [if (con.targetPlatform.toString()='DAML')]
+    [file (con.scName.replaceAll(' ', '_')+'M.txt', false, 'UTF-8')]
+module [con.scName.replaceAll(' ', '_')/] where
+import Daml.Script
+import DA.Assert
+import DA.List
+
+		[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+		[if(role.owner->isEmpty())]		
+template [role.name.replaceAll(' ', '')/]_Role
+	with
+		owner : Party
+		members : ['['/]Party[']'/]
+		role_name : Text
+	where
+		signatory owner
+		[/if]
+
+        [/for]
+
+[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+	[if(role.owner->notEmpty())]		
+template [role.name.replaceAll(' ', '')/]_Role
+with
+	default_owner : Party
+	owner : Party
+	members : ['['/]Party[']'/]
+	role_name : Text
+where
+	signatory default_owner
+	observer owner
+
+	choice SetNewOwner
+		: ContractId [role.name.replaceAll(' ', '')/]_Role
+		with
+			newOwner : Party
+		controller owner
+		do
+			assertMsg "newOwner cannot be equal to owner." (owner /= newOwner)
+			create this with
+				owner = newOwner
+
+	choice SetMembers
+		: ContractId [role.name.replaceAll(' ', '')/]_Role
+		with
+			newMembers : ['['/]Party[']'/]
+		controller owner
+		do
+			create this with
+				members = newMembers
+		
+
+template [role.name.replaceAll(' ', '')/]_Role_Proposal
+	with
+		[role.name.replaceAll(' ', '').toLowerFirst()/]_Role : 	[role.name.replaceAll(' ', '')/]_Role
+	where
+		signatory [role.name.replaceAll(' ', '').toLowerFirst()/]_Role.default_owner
+		observer [role.name.replaceAll(' ', '').toLowerFirst()/]_Role.owner
+
+		choice [role.name.replaceAll(' ', '')/]_Role_Proposal_Accept
+			: ContractId [role.name.replaceAll(' ', '')/]_Role
+			controller [role.name.replaceAll(' ', '').toLowerFirst()/]_Role.owner
+			do
+				create [role.name.replaceAll(' ', '').toLowerFirst()/]_Role						
+	[/if]
+[/for]
+
+template [con.scName.replaceAll(' ', '_')/]
+	with
+		owner : Party
+		[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+		[role.name.replaceAll(' ', '').toLowerFirst()/]Role: [role.name.replaceAll(' ', '')/]_Role
+		[/for]
+[for (par : Participant | con.eAllContents("Participant")->asOrderedSet())]
+		[par.name.replaceAll(' ', '').toLowerFirst()/] : Party
+[/for]
+[for (as : Asset | con.eAllContents("Asset")->asOrderedSet())]
+  [for (par : Parameter | as.eAllContents("Parameter")->asOrderedSet())]
+		[par.name.replaceAll(' ', '_').toLowerFirst()/] : [par.type/]
+  [/for]
+[/for]
+	where
+		signatory owner
+		observer [let s:Integer = self.eAllContents("Participant")->asOrderedSet()->size()][for (par : Participant | con.eAllContents("Participant")->asOrderedSet())][par.name.replaceAll(' ', '').toLowerFirst()/][if i <s],[/if][/for][/let][let t:Integer =con.eAllContents("Role")->asOrderedSet()->size()][if t>0],[for (role: Role | con.eAllContents("Role")->asOrderedSet())][role.name.replaceAll(' ', '').toLowerFirst()/]Role.members[if i <t],[/if][/for][/if][/let]
+
+[for (func : Transaction | con.eAllContents("Transaction"))]
+		choice [func.name/]
+			: ContractId [con.scName.replaceAll(' ', '_')/]
+			with			
+			[for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet())]
+			[if(roleRel.to = func)]
+				[let role:Role = roleRel.from.oclAsType(Role)]
+				[role.name.replaceAll(' ', '').toLowerFirst()/] : Party
+				[/let]
+			[/if]
+			[/for]
+			[for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func) )]
+				p[i/] : Party
+			[/for]
+				-- parameters here
+			controller [let t:Integer =con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func))->size()][for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func)))][let role:Role = roleRel.from.oclAsType(Role)][role.name.replaceAll(' ', '').toLowerFirst()/][if i <t],[/if][/let][/for][let s:Integer = con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name)->size()][if t>0 and s>0],[/if][for (tranrel : TranRel | con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name))][tranrel.from.name.replaceAll(' ', '').toLowerFirst()/][if i <s],[/if][/for][let o:Integer = con.eAllContents("OR")->asOrderedSet()->select(o | o.transaction=func)->size()][if t+s>0 and o>0],[/if][for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]p[i/][if i <o],[/if][/for][/let][/let][/let]
+			do
+			[for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet())]
+			[if(roleRel.to = func)]
+			[let role:Role = roleRel.from.oclAsType(Role)]
+				assert ([role.name.replaceAll(' ', '').toLowerFirst()/] `elem` [role.name.replaceAll(' ', '').toLowerFirst()/]Role.members)
+			[/let]
+			[/if]
+			[/for]
+			[let t:Integer =con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func))->size()]
+			[if(t>0)]
+			[let s:Integer = con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name)->size()]
+			[for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet())]
+				[if(roleRel.to->includes(func))]
+					[let role:Role = roleRel.from.oclAsType(Role)]
+					[for (tranrel : TranRel | con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name))]	
+				assert ([role.name.replaceAll(' ', '').toLowerFirst()/] /= [tranrel.from.name.replaceAll(' ', '').toLowerFirst()/])
+					[/for]
+					[/let]
+				[/if]
+			[/for]
+			[/let]
+			[/if]
+			[/let]
+			[for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]
+				assert (p[i/] `elem` (['['/][let or_dis:Integer =orr.dis_element->size()][for(dis:Participant| orr.dis_element->select(par | par.oclIsKindOf(Participant))->asOrderedSet())][dis.name.replaceAll(' ', '').toLowerFirst()/][if i <or_dis],[/if][/for][/let][']'/][for(rr:RoleRel| con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to=orr))] ++ [rr.from.name.replaceAll(' ', '').toLowerFirst()/]Role.members[/for]))
+			[/for]
+				create this with
+					-- Replace with the choice body
+
+[/for]
+
+[for (func : Transaction | con.eAllContents("Transaction"))]
+[let t:Integer =con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func))->size()]
+[let s:Integer = con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name)->size()]
+[let o:Integer = con.eAllContents("OR")->asOrderedSet()->select(o | o.transaction=func)->size()]
+[if(t+s+o>1)]
+template [func.name/]_Pending
+  with
+	finalContract: [con.scName.replaceAll(' ', '_')/]
+	alreadySigned: ['['/]Party[']'/]
+	[if(t>0)]
+		[for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet())]
+			[if(roleRel.to = func)]
+				[let role:Role = roleRel.from.oclAsType(Role)]
+	[role.name.replaceAll(' ', '').toLowerFirst()/] : Party
+				[/let]
+			[/if]
+		[/for]
+	[/if]
+	[for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func) )]
+	p[i/] : Party
+	[/for]
+  where
+    signatory alreadySigned
+    observer  ['['/][for(tranrel: TranRel | con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name))]finalContract.[tranrel.from.name.replaceAll(' ', '').toLowerFirst()/][if i <s],[/if][/for][']'/][for(rr:RoleRel| con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to=func))] ++ finalContract.[rr.from.name.replaceAll(' ', '').toLowerFirst()/]Role.members[/for][if(o>0)]++['['/][for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]p[i/][/for][']'/][/if]
+    ensure
+      unique alreadySigned
+
+    let toSign = filter (`notElem` alreadySigned) ['['/][for(tranrel: TranRel | con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name))]finalContract.[tranrel.from.name.replaceAll(' ', '').toLowerFirst()/][if i <s],[/if][/for][if i <s+t],[/if][let t:Integer =con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func))->size()][for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func)))][let role:Role = roleRel.from.oclAsType(Role)][role.name.replaceAll(' ', '').toLowerFirst()/][if i <t],[/if][/let][/for][/let][']'/][if(s+t>0)]++[/if]['['/][for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]p[i/][/for][']'/]
+
+    choice Sign : ContractId [func.name/]_Pending with
+        signer : Party
+      controller signer
+        do
+          assert (signer `elem` toSign)
+          create this with alreadySigned = signer :: alreadySigned
+
+    choice Finalize : ContractId [con.scName.replaceAll(' ', '_')/] with
+			signer : Party
+			-- parameters here
+			ghcId: ContractId [con.scName.replaceAll(' ', '_')/]
+		controller signer
+        do
+          -- Check that all the required signatories have signed Pending
+          assert (sort alreadySigned == sort ['['/][for(tranrel: TranRel | con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name))]finalContract.[tranrel.from.name.replaceAll(' ', '').toLowerFirst()/][if i <s],[/if][/for][if i <s+t],[/if][let t:Integer =con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func))->size()][for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func)))][let role:Role = roleRel.from.oclAsType(Role)][role.name.replaceAll(' ', '').toLowerFirst()/][if i <t],[/if][/let][/for][/let][']'/][if(s+t>0)]++[/if]['['/][for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func))]p[i/][/for][']'/])
+          exercise ghcId [func.name/] with
+					-- Replace with the choice body
+[/if]
+[/let]
+[/let]
+[/let]
+[/for]
+	[/file]
+	[file ('Testing_'+con.scName.replaceAll(' ', '_')+'M.txt', false, 'UTF-8')]
+token_test : Script ()
+token_test = do
+
+	account0 <- allocateParty "Account0" -- Owner
+[for (par : Participant | con.eAllContents("Participant"))]
+	account[i/] <- allocateParty "Account[i/]" -- [par.name.replaceAll(' ', '')/]
+[/for]
+
+[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+	[if(role.owner->isEmpty())]
+	[role.name.replaceAll(' ', '').toLowerFirst()/]_id <- submit account0 do
+		createCmd [role.name.replaceAll(' ', '')/]_Role with
+			owner = account0
+			members = ['['/][let x:Integer = role.participant->size()][for (par : Participant | role.participant->asOrderedSet())][let j : Integer = con.eAllContents("Participant")->asOrderedSet()->indexOf(par)]account[j/][if (i<x)],[/if][/let][/for][/let][']'/]
+			role_name = "[role.name.replaceAll(' ', '')/] Role"
+
+	Some [role.name.replaceAll(' ', '').toLowerFirst()/]_role <- queryContractId account0 [role.name.replaceAll(' ', '').toLowerFirst()/]_id
+	[/if]
+[/for]
+
+[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+	[if(role.owner->notEmpty())]
+
+  [role.name.replaceAll(' ', '').toLowerFirst()/]_Role_Proposal <- submit account0 do
+	 createCmd [role.name.replaceAll(' ', '')/]_Role_Proposal with
+		[role.name.replaceAll(' ', '').toLowerFirst()/]_Role = [role.name.replaceAll(' ', '')/]_Role with
+			default_owner = account0
+			owner = [for (par : Participant | con.eAllContents("Participant")->asOrderedSet())][let j : Integer = i][for (role: Role | con.eAllContents("Role")->asOrderedSet())][if(role.owner->includes(par))]account[j/][/if][/for][/let][/for]
+			members = ['['/][for (par : Participant | con.eAllContents("Participant")->asOrderedSet())][let j : Integer = i][for (role: Role | con.eAllContents("Role")->asOrderedSet())][if(role.participant->includes(par))]account[j/][if (par.followingSiblings()->size()>0)],[/if][/if][/for][/let][/for][']'/]
+      		role_name = "[role.name.replaceAll(' ', '')/] Role"
+
+  [role.name.replaceAll(' ', '').toLowerFirst()/]_role_id <- submit [for (par : Participant | con.eAllContents("Participant")->asOrderedSet())][let j : Integer = i][for (role: Role | con.eAllContents("Role")->asOrderedSet())][if(role.owner->includes(par))]account[j/][/if][/for][/let][/for] do
+  	exerciseCmd [role.name.replaceAll(' ', '').toLowerFirst()/]_Role_Proposal [role.name.replaceAll(' ', '')/]_Role_Proposal_Accept 	
+
+    Some [role.name.replaceAll(' ', '').toLowerFirst()/]_role <- queryContractId account0 [role.name.replaceAll(' ', '').toLowerFirst()/]_role_id
+	[/if]
+[/for]
+
+	newContractid <- submit account0 do
+		createCmd [con.scName.replaceAll(' ', '_')/] with
+			owner = account0
+			[for (role: Role | con.eAllContents("Role")->asOrderedSet())]
+			[role.name.replaceAll(' ', '').toLowerFirst()/]Role = [role.name.replaceAll(' ', '').toLowerFirst()/]_role
+[/for]
+        [for (par : Participant | con.eAllContents("Participant")->asOrderedSet())]
+			[let j : Integer = i][par.name.replaceAll(' ', '').toLowerFirst()/] = account[j/][/let]
+        [/for]
+        [for (as : Asset | con.eAllContents("Asset")->asOrderedSet())]
+			-- Replace the [as.name/] asset's parameter(s) with new values
+        [/for]
+
+		[for (func : Transaction | con.eAllContents("Transaction"))]
+[let s:Integer = con.eAllContents("TranRel")->asOrderedSet()->select(trre | trre.to.name=func.name)->size()]
+[let t:Integer = con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func))->size()]
+[let o:Integer = con.eAllContents("OR")->asOrderedSet()->select(o | o.transaction=func)->size()]
+[if s+t+o<=1]
+		[for (tranrel : TranRel | con.eAllContents("TranRel")->select(trre | trre.to.name=func.name))]
+		
+    	[for (par : Participant | con.eAllContents("Participant"))]
+  	[if (tranrel.from=par)]
+[let j : Integer = i]
+	newContractid <- submit account[j/] do
+[/let][/if][/for]
+		exerciseCmd newContractid [func.name/] with
+      [for (as : Asset | con.eAllContents("Asset")->asOrderedSet())]
+			-- Replace the [as.name/] asset's parameter(s) with updated values for testing
+        [/for]
+
+	Some newCrontact <- queryContractId account0 newContractid
+	-- Insert an assertion here		
+
+		[/for]
+		[for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(func)))]
+		[for (par : Participant | con.eAllContents("Participant"))]
+		[let role:Role = roleRel.from.oclAsType(Role)]
+		[if(role.participant->includes(par))]
+		[let j : Integer = i]
+	newContractid <- submit account[j/] do
+		exerciseCmd newContractid [func.name/] with
+			[role.name.replaceAll(' ', '').toLowerFirst()/] = account[j/]
+		[/let]
+      [for (as : Asset | con.eAllContents("Asset")->asOrderedSet())]
+			-- Replace the [as.name/] asset's parameter(s) with updated values for testing
+        [/for]
+
+	Some newCrontact <- queryContractId account0 newContractid
+	-- Insert an assertion here	
+
+		[/if]
+		[/let]		
+		[/for]
+        [/for]
+		[for (orr:OR | con.eAllContents("OR")->asOrderedSet()->select(orr | orr.transaction=func) )]
+		[for (par : Participant | con.eAllContents("Participant"))]
+		[if (orr.dis_element->includes(par))]
+		[let j : Integer = i]
+	newContractid <- submit account[j/] do
+		exerciseCmd newContractid [func.name/] with
+			p1 = account[j/]
+		[/let]
+      [for (as : Asset | con.eAllContents("Asset")->asOrderedSet())]
+			-- Replace the [as.name/] asset's parameter(s) with updated values for testing
+        [/for]
+
+	Some newCrontact <- queryContractId account0 newContractid
+	-- Insert an assertion here	
+
+		[/if]
+		[/for]
+		[for (roleRel: RoleRel | con.eAllContents("RoleRel")->asOrderedSet()->select(r | r.to->includes(orr)))]
+		[for (par : Participant | con.eAllContents("Participant"))]
+		[let role:Role = roleRel.from.oclAsType(Role)]
+		[if(role.participant->includes(par))]
+		[let j : Integer = i]
+	newContractid <- submit account[j/] do
+		exerciseCmd newContractid [func.name/] with
+			p1 = account[j/]
+		[/let]
+      [for (as : Asset | con.eAllContents("Asset")->asOrderedSet())]
+			-- Replace the [as.name/] asset's parameter(s) with updated values for testing
+        [/for]
+
+	Some newCrontact <- queryContractId account0 newContractid
+	-- Insert an assertion here	
+
+		[/if]
+		[/let]		
+		[/for]
+        [/for]
+		[/for]		
+[/if]
+[/let]
+[/let]
+[/let]
+        [/for]
+	assert (True)
+
+
+[/file]
+[/if]
+[/for]
+
+[/template]

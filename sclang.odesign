@@ -1,0 +1,1114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:properties="http://www.eclipse.org/sirius/properties/1.0.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/diagram/description/tool/1.1.0" xmlns:tool_1="http://www.eclipse.org/sirius/description/tool/1.1.0" xmlns:validation="http://www.eclipse.org/sirius/description/validation/1.1.0" name="scltest" version="12.0.0.2017041100">
+  <ownedViewpoints name="SCLang2">
+    <ownedRepresentations xsi:type="description_1:DiagramDescription" name="SC2" domainClass="sclang::ContractLanguage" enablePopupBars="true">
+      <metamodel href="http://www.example.org/sclang#/"/>
+      <validationSet name="SCLangValidation">
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="NoDuplicateParticipantNamesAllowed" level="ERROR" message="There is a duplicate participant's name." targetClass="sclang::SContract">
+          <audits auditExpression="aql:self.oclAsType(sclang::SContract).eContents(sclang::Participant)->isUnique(p|p.name)"/>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="NoDuplicateRoleNamesAllowed" level="ERROR" message="There is a duplicate role's name." targetClass="sclang::SContract">
+          <audits auditExpression="aql:self.oclAsType(sclang::SContract).eContents(sclang::Role)->isUnique(p|p.name)"/>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="NoDuplicateTransactionNamesAllowed" level="ERROR" message="There is a duplicate transaction's name." targetClass="sclang::SContract">
+          <audits auditExpression="aql:self.oclAsType(sclang::SContract).eContents(sclang::Transaction)->isUnique(p|p.name)"/>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="MinNumberMembersMustBePositive" level="ERROR" message="Minimum number of members for a role relationship must be positive." targetClass="sclang::RoleRel">
+          <audits auditExpression="aql:self.oclAsType(sclang::RoleRel).min_num_members>0"/>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="NoEmptyParticipantNamesAllowed" level="ERROR" message="There is an empty participant's name." targetClass="sclang::Participant">
+          <audits auditExpression="aql:self.oclAsType(sclang::Participant).name.size()>0"/>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="NoEmptyRoleNamesAllowed" level="ERROR" message="There is an empty role's name." targetClass="sclang::Role">
+          <audits auditExpression="aql:self.oclAsType(sclang::Role).name.size()>0"/>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="NoEmptyTransactionNamesAllowed" level="ERROR" message="There is an empty transaction's name." targetClass="sclang::Transaction">
+          <audits auditExpression="aql:self.oclAsType(sclang::Transaction).name.size()>0"/>
+        </ownedRules>
+      </validationSet>
+      <defaultLayer name="Default">
+        <edgeMappings name="TransactionRelationship" sourceMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Participants']" targetMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Transactions']" targetFinderExpression="feature:to" sourceFinderExpression="feature:from" domainClass="sclang::TranRel" useDomainElement="true">
+          <style sizeComputationExpression="2" routingStyle="manhattan">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <centerLabelStyleDescription labelSize="12">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <edgeMappings name="AssetTrelationship" sourceMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Transactions']" targetMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subContainerMappings[name='SubAss']" targetFinderExpression="feature:to" sourceFinderExpression="feature:from" domainClass="sclang::AssetRel" useDomainElement="true">
+          <style lineStyle="dash" sizeComputationExpression="2" routingStyle="manhattan">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <centerLabelStyleDescription labelSize="12" showIcon="false">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <edgeMappings name="RoleRelationship" sourceMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Roles']" targetMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Transactions'] //@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='ORs']" targetFinderExpression="feature:to" sourceFinderExpression="feature:from" domainClass="sclang::RoleRel" useDomainElement="true">
+          <style sizeComputationExpression="2" routingStyle="manhattan">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_red']"/>
+            <centerLabelStyleDescription labelSize="12" showIcon="false" labelExpression="aql:self.min_num_members">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_red']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <edgeMappings name="roleLinkedEdge1" deletionDescription="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='deleteRoleLinkedParticipant']" sourceMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Roles']" targetMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Participants']" targetFinderExpression="feature:participant" reconnections="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='reconnectRoleLinkedParticipant']">
+          <style sizeComputationExpression="2">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='blue']"/>
+            <centerLabelStyleDescription labelSize="12">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <edgeMappings name="roleLinkedEdge2" deletionDescription="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='deleteRoleLinkedTransaction']" sourceMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Roles']" targetMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Transactions']" targetFinderExpression="feature:transaction" reconnections="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='reconnectRoleLinkedTransaction']">
+          <style sizeComputationExpression="2">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_red']"/>
+            <centerLabelStyleDescription labelSize="12">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <edgeMappings name="orLinkedEdge1" deletionDescription="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='deleteOrDisjunct']" sourceMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='ORs']" targetMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Participants']" targetFinderExpression="feature:dis_element" reconnections="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='reconnectOrDisjunct']">
+          <style lineStyle="dash" sizeComputationExpression="2" routingStyle="manhattan">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_green']"/>
+            <centerLabelStyleDescription labelSize="12">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <edgeMappings name="orLinkedEdge2" deletionDescription="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='deleteOrTransaction']" sourceMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='ORs']" targetMapping="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Transactions']" targetFinderExpression="feature:transaction" reconnections="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@toolSections.1/@ownedTools[name='reconnectOrTransaction']">
+          <style sizeComputationExpression="2" routingStyle="manhattan">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_green']"/>
+            <centerLabelStyleDescription labelSize="12">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <containerMappings name="SContract2" semanticCandidatesExpression="feature:scontract" domainClass="sclang::SContract">
+          <subNodeMappings name="Participants" semanticCandidatesExpression="feature:element" domainClass="sclang::Participant">
+            <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" sizeComputationExpression="4" workspacePath="/sclang.design/icons/Participant3.gif">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </style>
+          </subNodeMappings>
+          <subNodeMappings name="Transactions" semanticCandidatesExpression="feature:element" domainClass="sclang::Transaction">
+            <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" sizeComputationExpression="5" workspacePath="/sclang.design/icons/Transaction2.gif">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </style>
+          </subNodeMappings>
+          <subNodeMappings name="Roles" semanticCandidatesExpression="feature:element" domainClass="sclang::Role">
+            <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" sizeComputationExpression="5" workspacePath="/sclang.design/icons/shape_circle.png">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </style>
+          </subNodeMappings>
+          <subNodeMappings name="ORs" semanticCandidatesExpression="feature:element" domainClass="sclang::OR">
+            <style xsi:type="style:WorkspaceImageDescription" labelSize="12" showIcon="false" sizeComputationExpression="4" workspacePath="/sclang.design/icons/or_shape.png">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </style>
+          </subNodeMappings>
+          <subContainerMappings name="SubAss" semanticCandidatesExpression="feature:element" domainClass="sclang::Asset" childrenPresentation="List">
+            <subNodeMappings name="AssPar" semanticCandidatesExpression="feature:element" domainClass="sclang::Parameter">
+              <style xsi:type="style:SquareDescription" labelSize="10" labelExpression="aql:self.name" labelAlignment="LEFT" sizeComputationExpression="10" labelPosition="node" width="10" height="10">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
+              </style>
+            </subNodeMappings>
+            <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_blue']"/>
+              <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+            </style>
+          </subContainerMappings>
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="12" showIcon="false" labelExpression="feature:scName" widthComputationExpression="60" heightComputationExpression="25">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+            <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+          </style>
+        </containerMappings>
+        <toolSections name="Smart Contract">
+          <ownedTools xsi:type="tool:ContainerCreationDescription" name="Smart Contract" containerMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::SContract" referenceName="scontract" variableName="scontract2">
+                <subModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+        </toolSections>
+        <toolSections name="Elements">
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="Participants" nodeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Participants']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Participant" referenceName="element" variableName="participant"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:ContainerCreationDescription" name="Asset" containerMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subContainerMappings[name='SubAss']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Asset" referenceName="element" variableName="asset">
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="string"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="string"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="Transaction" nodeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Transactions']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Transaction" referenceName="element" variableName="transaction"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="Relationship" edgeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@edgeMappings[name='TransactionRelationship'] //@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@edgeMappings[name='AssetTrelationship']">
+            <sourceVariable name="source"/>
+            <targetVariable name="target"/>
+            <sourceViewVariable name="sourceView"/>
+            <targetViewVariable name="targetView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:target.oclIsKindOf(sclang::Transaction)">
+                  <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::TranRel" referenceName="relationship" variableName="relationship">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="from" valueExpression="var:source"/>
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="to" valueExpression="var:target"/>
+                  </subModelOperations>
+                </subModelOperations>
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:target.oclIsKindOf(sclang::Asset)">
+                  <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::AssetRel" referenceName="relationship" variableName="relationship">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="from" valueExpression="var:source"/>
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="to" valueExpression="var:target"/>
+                  </subModelOperations>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="RoleRelationship" edgeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@edgeMappings[name='RoleRelationship']" iconPath="/sclang.design/icons/roleToTransaction.png">
+            <sourceVariable name="source"/>
+            <targetVariable name="target"/>
+            <sourceViewVariable name="sourceView"/>
+            <targetViewVariable name="targetView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:target.oclIsKindOf(sclang::Transaction)">
+                  <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::RoleRel" referenceName="relationship">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="from" valueExpression="var:source"/>
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="to" valueExpression="var:target"/>
+                  </subModelOperations>
+                </subModelOperations>
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:target.oclIsKindOf(sclang::OR)">
+                  <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::RoleRel" referenceName="relationship">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="from" valueExpression="var:source"/>
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="to" valueExpression="var:target"/>
+                  </subModelOperations>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="Roles" nodeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='Roles']" iconPath="/sclang.design/icons/shape_circle2.png">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Role" referenceName="element" variableName="role"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="setParticipant" edgeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@edgeMappings[name='roleLinkedEdge1']" iconPath="/sclang.design/icons/roleToParticipant.png">
+            <sourceVariable name="source"/>
+            <targetVariable name="target"/>
+            <sourceViewVariable name="sourceView"/>
+            <targetViewVariable name="targetView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:source">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="participant" valueExpression="var:target"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="setDisjunct" edgeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@edgeMappings[name='orLinkedEdge1']" iconPath="/sclang.design/icons/orToTransaction2.png">
+            <sourceVariable name="source"/>
+            <targetVariable name="target"/>
+            <sourceViewVariable name="sourceView"/>
+            <targetViewVariable name="targetView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:source">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="dis_element" valueExpression="var:target"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="setTransaction" edgeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@edgeMappings[name='orLinkedEdge2']" iconPath="/sclang.design/icons/orToTransaction.png">
+            <sourceVariable name="source"/>
+            <targetVariable name="target"/>
+            <sourceViewVariable name="sourceView"/>
+            <targetViewVariable name="targetView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:source">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="transaction" valueExpression="var:target"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:ReconnectEdgeDescription" name="reconnectRoleLinkedParticipant">
+            <source name="source"/>
+            <target name="target"/>
+            <sourceView name="sourceView"/>
+            <targetView name="targetView"/>
+            <element name="element"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="participant" valueExpression="var:target">
+                  <subModelOperations xsi:type="tool_1:Unset" featureName="participant" elementExpression="var:source"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+            <edgeView name="edgeView"/>
+          </ownedTools>
+          <ownedTools xsi:type="tool:ReconnectEdgeDescription" name="reconnectRoleLinkedTransaction">
+            <source name="source"/>
+            <target name="target"/>
+            <sourceView name="sourceView"/>
+            <targetView name="targetView"/>
+            <element name="element"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="transaction" valueExpression="var:target">
+                  <subModelOperations xsi:type="tool_1:Unset" featureName="transaction" elementExpression="var:source"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+            <edgeView name="edgeView"/>
+          </ownedTools>
+          <ownedTools xsi:type="tool:DeleteElementDescription" name="deleteRoleLinkedParticipant">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <containerView name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:Unset" featureName="participant" elementExpression="[elementView.oclAsType(DEdge).targetNode.oclAsType(DNode).target/]"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:DeleteElementDescription" name="deleteRoleLinkedTransaction">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <containerView name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:Unset" featureName="transaction" elementExpression="[elementView.oclAsType(DEdge).targetNode.oclAsType(DNode).target/]"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="ORs" nodeMappings="//@ownedViewpoints[name='SCLang2']/@ownedRepresentations[name='SC2']/@defaultLayer/@containerMappings[name='SContract2']/@subNodeMappings[name='ORs']" iconPath="/sclang.design/icons/or_shape2.png">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::OR" referenceName="element" variableName="or"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:DeleteElementDescription" name="deleteOrDisjunct">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <containerView name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:Unset" featureName="dis_element" elementExpression="[elementView.oclAsType(DEdge).targetNode.oclAsType(DNode).target/]"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:DeleteElementDescription" name="deleteOrTransaction">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <containerView name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:Unset" featureName="transaction" elementExpression="[elementView.oclAsType(DEdge).targetNode.oclAsType(DNode).target/]"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:ReconnectEdgeDescription" name="reconnectOrDisjunct">
+            <source name="source"/>
+            <target name="target"/>
+            <sourceView name="sourceView"/>
+            <targetView name="targetView"/>
+            <element name="element"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="dis_element" valueExpression="var:target">
+                  <subModelOperations xsi:type="tool_1:Unset" featureName="participant" elementExpression="var:source"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+            <edgeView name="edgeView"/>
+          </ownedTools>
+          <ownedTools xsi:type="tool:ReconnectEdgeDescription" name="reconnectOrTransaction">
+            <source name="source"/>
+            <target name="target"/>
+            <sourceView name="sourceView"/>
+            <targetView name="targetView"/>
+            <element name="element"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="transaction" valueExpression="var:target">
+                  <subModelOperations xsi:type="tool_1:Unset" featureName="transaction" elementExpression="var:source"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+            <edgeView name="edgeView"/>
+          </ownedTools>
+        </toolSections>
+      </defaultLayer>
+    </ownedRepresentations>
+    <ownedJavaExtensions qualifiedClassName="scltest.design.Services"/>
+  </ownedViewpoints>
+  <extensions xsi:type="properties:ViewExtensionDescription" name="Properties">
+    <categories name="Default Category">
+      <pages name="Default Page" labelExpression="Properties" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.0 //@extensions.0/@categories.0/@groups.1 //@extensions.0/@categories.0/@groups.5 //@extensions.0/@categories.0/@groups.8 //@extensions.0/@categories.0/@groups.6 //@extensions.0/@categories.0/@groups.4 //@extensions.0/@categories.0/@groups.3 //@extensions.0/@categories.0/@groups.9 //@extensions.0/@categories.0/@groups.10 //@extensions.0/@categories.0/@groups.11 //@extensions.0/@categories.0/@groups.7 //@extensions.0/@categories.0/@groups.2"/>
+      <groups name="SC_Properties" labelExpression="Properties" domainClass="sclang::SContract" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.scName">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="scName" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+        <controls xsi:type="properties:SelectDescription" name="TargetedPlatform" labelExpression="Targeted Platform" valueExpression="aql: sclang::TargetedPlatform.getEEnumLiteral(self.targetPlatform.toString())" candidatesExpression="aql: sclang::TargetedPlatform.eLiterals" candidateDisplayExpression="aql: candidate.name.toString()">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="targetPlatform" valueExpression="aql:newValue.instance"/>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Part_Properties" labelExpression="Properties" domainClass="sclang::Participant" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+        <controls xsi:type="properties:CheckboxDescription" name="Creator" labelExpression="Can create the Smart Contract?" valueExpression="aql:self.creator">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="creator" valueExpression="aql:newValue">
+              <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:not self.creator">
+                <subModelOperations xsi:type="tool_1:For" expression="aql:self.eAllContents(sclang::TranRel)">
+                  <subModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:i">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="selected" valueExpression="aql:newValue"/>
+                  </subModelOperations>
+                </subModelOperations>
+              </subModelOperations>
+            </firstModelOperations>
+          </initialOperation>
+        </controls>
+        <controls xsi:type="properties:ContainerDescription" name="create">
+          <controls xsi:type="properties:LabelDescription" name="Message" labelExpression="Select the transaction used to initialize the Smart Contract" isEnabledExpression="aql:false"/>
+          <controls xsi:type="properties:DynamicMappingForDescription" name="Creation" iterator="i" iterableExpression="aql:self.eAllContents(sclang::TranRel)">
+            <ifs name="Creation" predicateExpression="aql:i->notEmpty()">
+              <widget xsi:type="properties:CheckboxDescription" name="Creation" labelExpression="aql:i.to.name" isEnabledExpression="aql:self.creator" valueExpression="aql:i.selected">
+                <initialOperation>
+                  <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:i">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="selected" valueExpression="aql:newValue"/>
+                  </firstModelOperations>
+                </initialOperation>
+              </widget>
+            </ifs>
+          </controls>
+        </controls>
+      </groups>
+      <groups name="Role_Properties" labelExpression="Properties" domainClass="sclang::Role" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Participant_Parameters" labelExpression="Extra Parameters" domainClass="sclang::Participant" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ListDescription" name="Parameters" labelExpression="Extra Parameters" valueExpression="aql:self.eAllContents(sclang::Parameter)->asOrderedSet()" displayExpression="aql:value.name +' --- '+if(value.type='array')then sclang::ParType.getEEnumLiteral(value.type) +' of '+if(sclang::ParType.getEEnumLiteral(value.list)->notEmpty())then sclang::ParType.getEEnumLiteral(value.list) else value.list endif else sclang::ParType.getEEnumLiteral(value.type) endif">
+          <actions labelExpression="Create Parameter">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Parameter" referenceName="element" variableName="asspar">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="string"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="string"/>
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="Default Page" labelExpression="New Parameter" domainClass="sclang::Parameter" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.3/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.2/@groups.0 //@extensions.0/@categories.0/@groups.3/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.2/@groups.1"/>
+                  <groups name="Default Group" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:RadioDescription" name="Type" labelExpression="Represented by" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.type)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.type)->first() else sclang::ParType.getEEnumLiteral(self.type.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="aql:newValue.name"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                  <groups name="List" labelExpression="List compose of" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:RadioDescription" name="List_par" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.list)->first() else sclang::ParType.getEEnumLiteral(self.list.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::ParType)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::Participant)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                        </firstModelOperations>
+                      </initialOperation>
+                    </controls>
+                    <style expandedByDefault="true"/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Delete Paramter">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="tool_1:RemoveElement"/>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+        </controls>
+        <style/>
+      </groups>
+      <groups name="Participant_OwnsAsset2" labelExpression="Assets" domainClass="sclang::Participant" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ContainerDescription">
+          <controls xsi:type="properties:LabelDescription" name="Message" labelExpression="Assets in which is involved and the actions that can perform on them" isEnabledExpression="aql:false"/>
+          <controls xsi:type="properties:ListDescription" name="Asset_Involved" valueExpression="aql:self.eAllContents(sclang::TranRel).to.eAllContents(sclang::AssetRel)" displayExpression="aql:value.to.name + if((self.eAllContents(sclang::TranRel).to.eAllContents(sclang::AssetRel)->select(myAssetRel |  myAssetRel=value))->first().all)then  ' --- Can do all actions ' else '' endif + if((self.eAllContents(sclang::TranRel).to.eAllContents(sclang::AssetRel)->select(myAssetRel |  myAssetRel=value))->first().create)then  ' --- Can create ' else '' endif + if((self.eAllContents(sclang::TranRel).to.eAllContents(sclang::AssetRel)->select(myAssetRel |  myAssetRel=value))->first().read)then  ' --- Can read ' else '' endif + if((self.eAllContents(sclang::TranRel).to.eAllContents(sclang::AssetRel)->select(myAssetRel |  myAssetRel=value))->first().update)then  ' --- Can update ' else '' endif + if((self.eAllContents(sclang::TranRel).to.eAllContents(sclang::AssetRel)->select(myAssetRel |  myAssetRel=value))->first().delete)then  ' --- Can delete ' else '' endif">
+            <actions labelExpression="Change">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                  <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                    <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                      <initialOperation/>
+                    </buttons>
+                    <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                      <initialOperation/>
+                    </buttons>
+                    <page name="Default Page" labelExpression="Page" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.4/@controls.0/@controls.1/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.0"/>
+                    <groups name="Default Group" labelExpression="Group" domainClass="sclang::AssetRel" semanticCandidateExpression="var:self">
+                      <controls xsi:type="properties:ContainerDescription">
+                        <controls xsi:type="properties:CheckboxDescription" name="Create" labelExpression="Create" valueExpression="aql:self.create">
+                          <initialOperation>
+                            <firstModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="aql: if (self.delete or self.read or self.update) then newValue else true endif">
+                              <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                              <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.delete and self.read and self.update">
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                              </subModelOperations>
+                            </firstModelOperations>
+                          </initialOperation>
+                        </controls>
+                        <controls xsi:type="properties:CheckboxDescription" name="delete" labelExpression="Delete" valueExpression="aql:self.delete">
+                          <initialOperation>
+                            <firstModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="aql: if (self.create or self.read or self.update) then newValue else true endif">
+                              <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                              <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.create and self.read and self.update">
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                              </subModelOperations>
+                            </firstModelOperations>
+                          </initialOperation>
+                        </controls>
+                        <controls xsi:type="properties:CheckboxDescription" name="Read" labelExpression="Read" valueExpression="aql:self.read">
+                          <initialOperation>
+                            <firstModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="aql: if (self.create or self.delete or self.update) then newValue else true endif">
+                              <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                              <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.create and self.delete and self.update">
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                              </subModelOperations>
+                            </firstModelOperations>
+                          </initialOperation>
+                        </controls>
+                        <controls xsi:type="properties:CheckboxDescription" name="Update" labelExpression="Update" valueExpression="aql:self.update">
+                          <initialOperation>
+                            <firstModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="aql: if (self.create or self.read or self.delete) then newValue else true endif">
+                              <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                              <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.create and self.read and self.delete">
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                              </subModelOperations>
+                            </firstModelOperations>
+                          </initialOperation>
+                        </controls>
+                        <controls xsi:type="properties:CheckboxDescription" name="All" labelExpression="All" valueExpression="aql:self.all">
+                          <initialOperation>
+                            <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                              <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true">
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                                <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                              </subModelOperations>
+                            </firstModelOperations>
+                          </initialOperation>
+                        </controls>
+                        <layout xsi:type="properties:FillLayoutDescription" orientation="HORIZONTAL"/>
+                      </controls>
+                    </groups>
+                  </subModelOperations>
+                </firstModelOperations>
+              </initialOperation>
+            </actions>
+            <actions labelExpression="Delete">
+              <initialOperation>
+                <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                  <subModelOperations xsi:type="tool_1:RemoveElement"/>
+                </firstModelOperations>
+              </initialOperation>
+            </actions>
+          </controls>
+          <layout xsi:type="properties:FillLayoutDescription"/>
+        </controls>
+        <style/>
+      </groups>
+      <groups name="Tran_Properties" labelExpression="Properties" domainClass="sclang::Transaction" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Transaction_Conditions" labelExpression="Conditions" domainClass="sclang::Transaction" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ListDescription" name="Pre" labelExpression="Pre conditions" valueExpression="aql:self.eAllContents(sclang::Pre)->asOrderedSet()" displayExpression="aql:value.name +' --- '+ value.condition">
+          <actions labelExpression="Create Condition">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Pre" referenceName="condition" variableName="precondition">
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="Default Page" labelExpression="New Condition" domainClass="sclang::Condition" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.6/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.0"/>
+                  <groups name="Default Group" labelExpression="Group" domainClass="sclang::Condition" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:TextDescription" name="condition" labelExpression="Condition" valueExpression="aql:self.condition">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="condition" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Delete Condition">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="tool_1:RemoveElement"/>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+        </controls>
+        <controls xsi:type="properties:ListDescription" name="Post" labelExpression="Post conditions" valueExpression="aql:self.eAllContents(sclang::Post)->asOrderedSet()" displayExpression="aql:value.name +' --- '+ value.condition">
+          <actions labelExpression="Create Condition">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Post" referenceName="condition" variableName="postcondition">
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="Default Page" labelExpression="New Condition" domainClass="sclang::Condition" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.6/@controls.1/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.0"/>
+                  <groups name="Default Group" labelExpression="Group" domainClass="sclang::Condition" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:TextDescription" name="condition" labelExpression="Condition" valueExpression="aql:self.condition">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="condition" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Delete Condition">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="tool_1:RemoveElement"/>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+        </controls>
+        <style/>
+      </groups>
+      <groups name="Transaction_Parameters" labelExpression="Parameters" domainClass="sclang::Transaction" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ListDescription" name="Parameters" labelExpression="Parameters" valueExpression="aql:self.eAllContents(sclang::Parameter)->asOrderedSet()" displayExpression="aql:value.name +' --- '+if(value.type='array')then sclang::ParType.getEEnumLiteral(value.type) +' of '+if(sclang::ParType.getEEnumLiteral(value.list)->notEmpty())then sclang::ParType.getEEnumLiteral(value.list) else value.list endif else if(sclang::ParType.getEEnumLiteral(value.type)->notEmpty())then sclang::ParType.getEEnumLiteral(value.type) else value.type endif endif">
+          <actions labelExpression="Create Parameter">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Parameter" referenceName="element" variableName="asspar">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="string"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="string"/>
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="New Parameter" labelExpression="New Parameter" domainClass="sclang::Parameter" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.7/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.2/@groups.0 //@extensions.0/@categories.0/@groups.7/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.2/@groups.1"/>
+                  <groups name="Properties" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:RadioDescription" name="Type" labelExpression="Represented by" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.type)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.type)->first() else sclang::ParType.getEEnumLiteral(self.type.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="aql:newValue.name"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                  <groups name="List" labelExpression="List compose of" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:RadioDescription" name="List_par" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.list)->first() else sclang::ParType.getEEnumLiteral(self.list.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::ParType)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::Participant)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                        </firstModelOperations>
+                      </initialOperation>
+                    </controls>
+                    <style/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Change Properties">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="Default Page" labelExpression="Change Properties" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.7/@controls.0/@actions.1/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.0 //@extensions.0/@categories.0/@groups.7/@controls.0/@actions.1/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.1"/>
+                  <groups name="Properties" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:RadioDescription" name="Type" labelExpression="Represented by" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.type)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.type)->first() else sclang::ParType.getEEnumLiteral(self.type.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="aql:newValue.name"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                  <groups name="List" labelExpression="List compose of" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:RadioDescription" name="List_par" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.list)->first() else sclang::ParType.getEEnumLiteral(self.list.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::ParType)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::Participant)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                        </firstModelOperations>
+                      </initialOperation>
+                    </controls>
+                    <style/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Delete Paramter">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="tool_1:RemoveElement"/>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+        </controls>
+        <style/>
+      </groups>
+      <groups name="Ass_Properties" labelExpression="Properties" domainClass="sclang::Asset" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+        <controls xsi:type="properties:RadioDescription" name="Type" labelExpression="Represented by" valueExpression="aql: sclang::ParType.getEEnumLiteral(self.type)" candidatesExpression="aql: sclang::ParType.eLiterals" candidateDisplayExpression="aql: candidate.literal" numberOfColumns="2">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="aql:newValue.name"/>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Ass_List" labelExpression="List Compose of" domainClass="sclang::Asset" semanticCandidateExpression="var:self" preconditionExpression="aql:self.type= 'array'">
+        <controls xsi:type="properties:RadioDescription" name="List_par" valueExpression="aql:if(self.eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.list)->first() else sclang::ParType.getEEnumLiteral(self.list.toString()) endif" candidatesExpression="aql:self.eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant)then candidate.name else candidate.literal endif" numberOfColumns="3">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+              <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+            </firstModelOperations>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Ass_Parameters" labelExpression="Extra Parameters" domainClass="sclang::Asset" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ListDescription" name="Parameters" labelExpression="Extra Parameters" valueExpression="aql:self.eAllContents(sclang::Parameter)->asOrderedSet()" displayExpression="aql:value.name +' --- '+if(value.type='array')then sclang::ParType.getEEnumLiteral(value.type) +' of '+if(sclang::ParType.getEEnumLiteral(value.list)->notEmpty())then sclang::ParType.getEEnumLiteral(value.list) else value.list endif else if(sclang::ParType.getEEnumLiteral(value.type)->notEmpty())then sclang::ParType.getEEnumLiteral(value.type) else value.type endif endif">
+          <actions labelExpression="Create Parameter">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Parameter" referenceName="element" variableName="asspar">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="string"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="string"/>
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="New Parameter" labelExpression="New Parameter" domainClass="sclang::Parameter" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.10/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.2/@groups.0 //@extensions.0/@categories.0/@groups.10/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.2/@groups.1"/>
+                  <groups name="Properties" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:RadioDescription" name="Type" labelExpression="Represented by" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.type)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.type)->first() else sclang::ParType.getEEnumLiteral(self.type.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="aql:newValue.name"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                  <groups name="List" labelExpression="List compose of" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:RadioDescription" name="List_par" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.list)->first() else sclang::ParType.getEEnumLiteral(self.list.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::ParType)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::Participant)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                        </firstModelOperations>
+                      </initialOperation>
+                    </controls>
+                    <style/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Change Properties">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="Default Page" labelExpression="Change Properties" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.10/@controls.0/@actions.1/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.0 //@extensions.0/@categories.0/@groups.10/@controls.0/@actions.1/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.1"/>
+                  <groups name="Properties" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:RadioDescription" name="Type" labelExpression="Represented by" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.type)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.type)->first() else sclang::ParType.getEEnumLiteral(self.type.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="aql:newValue.name"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                  <groups name="List" labelExpression="List compose of" domainClass="sclang::Parameter" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:RadioDescription" name="List_par" valueExpression="aql:if(self.eContainer().eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.list)->first() else sclang::ParType.getEEnumLiteral(self.list.toString()) endif" candidatesExpression="aql:self.eContainer().eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant))then candidate.name else candidate.literal endif" numberOfColumns="3">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::ParType)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                          <subModelOperations xsi:type="tool_1:If" conditionExpression="aql:newValue.oclIsKindOf(sclang::Participant)">
+                            <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+                          </subModelOperations>
+                        </firstModelOperations>
+                      </initialOperation>
+                    </controls>
+                    <style/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Delete Paramter">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="tool_1:RemoveElement"/>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+        </controls>
+        <style/>
+      </groups>
+      <groups name="AssetRel_Events" labelExpression="Events" domainClass="sclang::AssetRel" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ListDescription" name="Events" labelExpression="Events happening when executing the transaction" valueExpression="aql:self.eAllContents(sclang::Events)->asOrderedSet()" displayExpression="aql:value.name +' --- '+ value.description">
+          <actions labelExpression="Create Event">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Events" referenceName="events" variableName="event">
+                <subModelOperations xsi:type="properties:DialogModelOperation" titleExpression="New Dialog">
+                  <buttons labelExpression="Cancel" closeDialogOnClick="true" rollbackChangesOnClose="true">
+                    <initialOperation/>
+                  </buttons>
+                  <buttons labelExpression="OK" default="true" closeDialogOnClick="true">
+                    <initialOperation/>
+                  </buttons>
+                  <page name="Event Page" labelExpression="New Event" domainClass="sclang::Events" semanticCandidateExpression="var:self" groups="//@extensions.0/@categories.0/@groups.11/@controls.0/@actions.0/@initialOperation/@firstModelOperations/@subModelOperations.0/@groups.0"/>
+                  <groups name="Event Group" domainClass="sclang::Events" semanticCandidateExpression="var:self">
+                    <controls xsi:type="properties:TextDescription" name="name" labelExpression="Name" valueExpression="aql:self.name">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <controls xsi:type="properties:TextDescription" name="Description" labelExpression="Description" valueExpression="aql:self.description">
+                      <initialOperation>
+                        <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:newValue"/>
+                      </initialOperation>
+                    </controls>
+                    <style barStyle="NO_TITLE" toggleStyle="NONE"/>
+                  </groups>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+          <actions labelExpression="Delete Event">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="tool_1:RemoveElement"/>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+        </controls>
+      </groups>
+      <groups name="Rel_Properties_NO_SE_UTILIZA" labelExpression="Properties" domainClass="sclang::Relationship" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Rule_Participant_NO_SE_UTILIZA" labelExpression="Participant" domainClass="sclang::Rule" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:SelectDescription" name="partic" labelExpression="particip" valueExpression="aql:self.participant" candidatesExpression="aql:self.eContainer().eAllContents(sclang::Participant)->asOrderedSet().name" candidateDisplayExpression="aql:candidate.toString()">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="participant" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Rule_Operation_NO_SE_UTILIZA" labelExpression="Operations" domainClass="sclang::Rule" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ContainerDescription">
+          <controls xsi:type="properties:CheckboxDescription" name="Create" labelExpression="Create" valueExpression="aql:self.create">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="aql: if (self.delete or self.read or self.update) then newValue else true endif">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.delete and self.read and self.update">
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </controls>
+          <controls xsi:type="properties:CheckboxDescription" name="delete" labelExpression="Delete" valueExpression="aql:self.delete">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="aql: if (self.create or self.read or self.update) then newValue else true endif">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.create and self.read and self.update">
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </controls>
+          <controls xsi:type="properties:CheckboxDescription" name="Read" labelExpression="Read" valueExpression="aql:self.read">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="aql: if (self.create or self.delete or self.update) then newValue else true endif">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.create and self.delete and self.update">
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </controls>
+          <controls xsi:type="properties:CheckboxDescription" name="Update" labelExpression="Update" valueExpression="aql:self.update">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="aql: if (self.create or self.read or self.delete) then newValue else true endif">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="false"/>
+                <subModelOperations xsi:type="tool_1:If" conditionExpression="aql: self.create and self.read and self.delete">
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </controls>
+          <controls xsi:type="properties:CheckboxDescription" name="All" labelExpression="All" valueExpression="aql:self.all">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="all" valueExpression="true">
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="create" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="read" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="update" valueExpression="false"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="delete" valueExpression="false"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </controls>
+          <layout xsi:type="properties:FillLayoutDescription" orientation="HORIZONTAL"/>
+        </controls>
+      </groups>
+      <groups name="Participant_OwnsAsset_NO_SE_UTILIZA" labelExpression="Assets" domainClass="sclang::Participant" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:SelectDescription" name="own" labelExpression="Add new asset" valueExpression="feature:element" candidatesExpression="aql:self.eContainer().eAllContents(sclang::Asset)" candidateDisplayExpression="aql:candidate.name">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:If" conditionExpression="aql:self.eAllContents(sclang::AssetRel)->asOrderedSet().to->excludes(newValue)">
+              <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::AssetRel" referenceName="relationship">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="to" valueExpression="aql:newValue"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="from" valueExpression="aql:self.eContainer()"/>
+              </subModelOperations>
+            </firstModelOperations>
+          </initialOperation>
+        </controls>
+        <controls xsi:type="properties:ListDescription" name="prueba" labelExpression="Assets Owns" valueExpression="aql:self.eAllContents(sclang::AssetRel)->asOrderedSet()" displayExpression="aql:value.to.name">
+          <actions labelExpression="Delete">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:For" expression="var:selection">
+                <subModelOperations xsi:type="tool_1:RemoveElement"/>
+              </firstModelOperations>
+            </initialOperation>
+          </actions>
+        </controls>
+        <style/>
+      </groups>
+      <groups name="OLD_Asset_Parameter_OLD_NO_SE_UTILIZA" labelExpression="Group" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:ButtonDescription" name="crear" labelExpression="Add extra parameter" buttonLabelExpression="Add">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+              <subModelOperations xsi:type="tool_1:CreateInstance" typeName="sclang::Parameter" referenceName="element" variableName="par">
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="string"/>
+                <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="New Parameter"/>
+              </subModelOperations>
+            </firstModelOperations>
+          </initialOperation>
+        </controls>
+        <controls xsi:type="properties:ContainerDescription" name="Parameters">
+          <controls xsi:type="properties:DynamicMappingForDescription" name="prueba" iterator="i" iterableExpression="aql:self.eAllContents()">
+            <ifs name="prueba2" predicateExpression="aql:i.oclIsKindOf(sclang::Parameter)">
+              <widget xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:i.name">
+                <initialOperation>
+                  <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:i">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+                  </firstModelOperations>
+                </initialOperation>
+              </widget>
+            </ifs>
+            <ifs name="prueba2" predicateExpression="aql:i.oclIsKindOf(sclang::Parameter)">
+              <widget xsi:type="properties:RadioDescription" name="Type" labelExpression="Represented by" valueExpression="aql: sclang::ParType.getEEnumLiteral(i.type.toString())" candidatesExpression="aql: sclang::ParType.eLiterals" candidateDisplayExpression="aql: candidate.literal" numberOfColumns="4">
+                <initialOperation>
+                  <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:i">
+                    <subModelOperations xsi:type="tool_1:SetValue" featureName="type" valueExpression="aql:newValue.name"/>
+                  </firstModelOperations>
+                </initialOperation>
+              </widget>
+            </ifs>
+            <ifs name="eliminar" predicateExpression="aql:i.oclIsKindOf(sclang::Parameter)">
+              <widget xsi:type="properties:ButtonDescription" name="eliminar" buttonLabelExpression="Delete">
+                <initialOperation>
+                  <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:i">
+                    <subModelOperations xsi:type="tool_1:Unset" featureName="elements">
+                      <subModelOperations xsi:type="tool_1:RemoveElement"/>
+                    </subModelOperations>
+                  </firstModelOperations>
+                </initialOperation>
+              </widget>
+            </ifs>
+          </controls>
+          <layout xsi:type="properties:FillLayoutDescription"/>
+        </controls>
+      </groups>
+      <groups name="Ass_List2_NO_SE_UTILIZA" labelExpression="List Compose of" domainClass="sclang::Asset" semanticCandidateExpression="var:self" preconditionExpression="aql:self.type= 'array'">
+        <controls xsi:type="properties:RadioDescription" name="List_par" labelExpression="aql: if(self.eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->first() else 'false' endif" valueExpression="aql:if(self.eContainer().eAllContents(sclang::Participant).name->select(n | n=self.list)->notEmpty())then self.eContainer().eAllContents(sclang::Participant)->select(n | n.name=self.list)->first() else sclang::ParType.getEEnumLiteral(self.list.toString()) endif" candidatesExpression="aql:self.eContainer().eAllContents(sclang::Participant)->union(sclang::ParType.eLiterals)" candidateDisplayExpression="aql:if(candidate.oclIsKindOf(sclang::Participant)then candidate.name else candidate.literal endif" numberOfColumns="3">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:self">
+              <subModelOperations xsi:type="tool_1:SetValue" featureName="list" valueExpression="aql:newValue.name"/>
+            </firstModelOperations>
+          </initialOperation>
+        </controls>
+      </groups>
+      <groups name="Part_Properties2_NO_SE_UTILIZA" labelExpression="Properties" domainClass="sclang::Participant" semanticCandidateExpression="var:self">
+        <controls xsi:type="properties:TextDescription" name="Name" labelExpression="Name" valueExpression="aql:self.name">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+        <controls xsi:type="properties:CheckboxDescription" name="Creator" labelExpression="Can create the Smart Contract?" valueExpression="aql:self.creator">
+          <initialOperation>
+            <firstModelOperations xsi:type="tool_1:SetValue" featureName="creator" valueExpression="aql:newValue"/>
+          </initialOperation>
+        </controls>
+      </groups>
+    </categories>
+  </extensions>
+</description:Group>
