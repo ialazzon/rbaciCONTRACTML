@@ -1,0 +1,61 @@
+module Test3 where
+import Daml.Script
+import DA.Assert
+import DA.List
+
+
+
+template HomeworkGrading2_Version2
+	with
+		owner : Party
+		grader1 : Party
+		grader2 : Party
+		comments : Text
+	where
+		signatory owner
+		observer grader1,grader2
+
+		choice GradeHW
+			: ContractId HomeworkGrading2_Version2
+			with			
+				p1 : Party
+				new_comments : Text
+			controller p1
+			do
+				assert (p1 `elem` [grader1,grader2])
+				create this with
+					comments = new_comments
+
+
+token_test : Script ()
+token_test = do
+
+	account0 <- allocateParty "Account0" -- Owner
+	account1 <- allocateParty "Account1" -- Grader1
+	account2 <- allocateParty "Account2" -- Grader2
+	account3 <- allocateParty "Account3" -- Grader3
+
+
+	newContractid <- submit account0 do
+		createCmd HomeworkGrading2_Version2 with
+			owner = account0
+			grader1 = account1
+			grader2 = account2
+			comments = "Comments Version 1.0"
+
+	Some newCrontact <- queryContractId account0 newContractid
+	-- Insert an assertion here	
+
+	newContractid <- submit account1 do
+		exerciseCmd newContractid GradeHW with
+			p1 = account1
+			new_comments = "Comments Version 2.0"
+
+	Some newCrontact <- queryContractId account0 newContractid
+	-- Insert an assertion here	
+
+	
+	assert (True)
+
+
+

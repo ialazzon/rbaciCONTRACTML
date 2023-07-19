@@ -1,0 +1,8 @@
+TC1 - Single-party
+TC2 - Single-role
+TC3 - Single OR with two parties
+TC4 - Single OR with one party and one role
+TC5 - Multi-Authorization (two parties)
+TC6 - Multi-Authorization (one party and one role)
+TC7 - Multi-Authorization (one party and one OR involving two parties)
+TC8 - Multi-Authorization (one party and one OR involving a party and a role)

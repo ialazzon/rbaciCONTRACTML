@@ -1,0 +1,64 @@
+module Test2 where
+import Daml.Script
+import DA.Assert
+import DA.List
+
+template HWEvaluator_Role
+	with
+		owner : Party
+		members : [Party]
+		role_name : Text
+	where
+		signatory owner
+
+
+
+template HomeworkGrading
+	with
+		owner : Party
+		hWEvaluatorRole: HWEvaluator_Role
+		grader1 : Party
+		grader2 : Party
+		comments : Text
+	where
+		signatory owner
+		observer grader1,grader2
+
+		choice GradeHW
+			: ContractId HomeworkGrading
+			with			
+				hWEvaluator : Party
+				new_comments : Text
+			controller hWEvaluator
+			do
+				assert (hWEvaluator `elem` hWEvaluatorRole.members)
+				create this with
+					comments = new_comments
+
+token_test : Script ()
+token_test = do
+
+	account0 <- allocateParty "Account0" -- Owner
+	account1 <- allocateParty "Account1" -- Grader1
+	account2 <- allocateParty "Account2" -- Grader2
+
+	hWEvaluator_id <- submit account0 do
+		createCmd HWEvaluator_Role with
+			owner = account0
+			members = [account1,account2]
+			role_name = "HWEvaluator Role"
+
+	Some hWEvaluator_role <- queryContractId account0 hWEvaluator_id
+
+
+	newContractid <- submit account0 do
+		createCmd HomeworkGrading with
+			owner = account0
+			hWEvaluatorRole = hWEvaluator_role
+			grader1 = account1
+			grader2 = account2
+			comments = "Comments Version 1.0"
+
+	
+	assert (True)
+

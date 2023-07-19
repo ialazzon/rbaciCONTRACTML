@@ -1,0 +1,98 @@
+module Test7 where
+import Daml.Script
+import DA.Assert
+import DA.List
+
+
+
+template HomeworkGrading2_Version2
+	with
+		owner : Party
+		grader1 : Party
+		grader2 : Party
+		grader3 : Party
+		comments : Text
+	where
+		signatory owner
+		observer grader1,grader2,grader3
+
+		choice GradeHW
+			: ContractId HomeworkGrading2_Version2
+			with			
+				p1 : Party
+				new_comments : Text
+			controller grader1,p1
+			do
+				assert (p1 `elem` ([grader2,grader3]))
+				create this with
+					comments = new_comments
+
+
+template GradeHW_Pending
+  with
+	finalContract: HomeworkGrading2_Version2
+	alreadySigned: [Party]
+	p1 : Party
+  where
+    signatory alreadySigned
+    observer  [finalContract.grader1]++[p1]
+    ensure
+      unique alreadySigned
+
+    let toSign = filter (`notElem` alreadySigned) [finalContract.grader1]++[p1]
+
+    choice Sign : ContractId GradeHW_Pending with
+        signer : Party
+      controller signer
+        do
+          assert (signer `elem` toSign)
+          create this with alreadySigned = signer :: alreadySigned
+
+    choice Finalize : ContractId HomeworkGrading2_Version2 with
+			signer : Party
+			comments : Text
+			ghcId: ContractId HomeworkGrading2_Version2
+		controller signer
+        do
+          -- Check that all the required signatories have signed Pending
+          assert (sort alreadySigned == sort [finalContract.grader1]++[p1])
+          exercise ghcId GradeHW with
+		  			p1 = p1
+					new_comments = comments
+
+token_test : Script ()
+token_test = do
+
+	account0 <- allocateParty "Account0" -- Owner
+	account1 <- allocateParty "Account1" -- Grader1
+	account2 <- allocateParty "Account2" -- Grader2
+	account3 <- allocateParty "Account3" -- Grader3
+	
+
+	newContractid <- submit account0 do
+		createCmd HomeworkGrading2_Version2 with
+			owner = account0
+			grader1 = account1
+			grader2 = account2
+			grader3 = account3
+			comments = "Comments Version 1.0"
+	
+	Some newCrontact <- queryContractId account0 newContractid
+
+	pending <- submit account1 do
+		createCmd GradeHW_Pending with
+			alreadySigned = [account1]
+			finalContract = newCrontact
+			p1 = account2
+
+	pending <- submit account2 do
+		exerciseCmd pending Sign with
+			signer = account2
+
+	newContractid <- submit account1 do
+		exerciseCmd pending Finalize with
+			signer = account1
+			comments = "Comments Version 2.0"
+			ghcId = newContractid
+
+	assert (True)
